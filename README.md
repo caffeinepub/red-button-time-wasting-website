@@ -1,2 +1,3 @@
-# red-button-time-wasting-website
-Exported from Caffeine project: Red Button Time Wasting Website
+## 
+
+To run app build and run docker image: `docker build -t app . docker run -it --network host app`

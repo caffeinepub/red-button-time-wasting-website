@@ -1,0 +1,15 @@
+{
+  "backend/main.mo": "Empty Motoko actor with no methods.",
+  "feature_evidence.json": "Metadata file listing implemented features, associated files, components, and test IDs.",
+  "frontend-file-summaries.txt": "Prewritten summaries of key frontend files including App.tsx, index.css, and usePersistedNumber hook.",
+  "frontend/index.css": "Tailwind base theme defining OKLCH color variables and dark mode mappings, applying global border and background/foreground styles.",
+  "frontend/index.html": "HTML entry point mounting the React app and loading main.tsx.",
+  "frontend/src/App.tsx": "React app with a click counter, localStorage persistence, and a 1000-click explosion animation that redirects afterward.",
+  "frontend/src/hooks/useActor.ts": "Hook that creates and caches a backend actor tied to Internet Identity, invalidating dependent queries on change.",
+  "frontend/src/hooks/useInternetIdentity.ts": "Internet Identity context and provider handling AuthClient setup, login flow, stored identity loading, and status tracking.",
+  "frontend/src/hooks/usePersistedNumber.ts": "Hook that stores a numeric state value in localStorage with validation and automatic syncing.",
+  "frontend/src/index.css": "Tailwind config with OKLCH theme variables, custom red button utilities, and explosion animation keyframes.",
+  "frontend/src/main.tsx": "App entry initializing React Query, Internet Identity provider, and rendering the App component.",
+  "frontend/tailwind.config.js": "Tailwind configuration enabling dark mode, custom OKLCH color tokens, extended animations, and plugins for typography, container queries, and animations.",
+  "project_state.json": "JSON snapshot describing the project's schema version and detailed feature summaries for the React/Tailwind frontend and empty Motoko backend."
+}
