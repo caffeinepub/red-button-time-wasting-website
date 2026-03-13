@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { usePersistedNumber } from "./hooks/usePersistedNumber";
 
 function App() {
   const [isPressed, setIsPressed] = useState(false);
-  const [clickCount, setClickCount] = usePersistedNumber("clickCount", 0);
+  const [clickCount, setClickCount] = useState(0);
   const [isExploding, setIsExploding] = useState(false);
 
   const handleClick = (e: React.MouseEvent) => {
@@ -11,6 +10,26 @@ function App() {
     if (isExploding) return;
     setClickCount((prevCount) => prevCount + 1);
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (isExploding) return;
+      if (
+        ["Shift", "Control", "Alt", "Meta", "CapsLock", "Tab"].includes(e.key)
+      )
+        return;
+      setIsPressed(true);
+      setClickCount((prevCount) => prevCount + 1);
+    };
+    const handleKeyUp = () => setIsPressed(false);
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [isExploding]);
 
   useEffect(() => {
     if (clickCount === 1000 && !isExploding) {
@@ -169,18 +188,23 @@ function App() {
         onMouseUp={() => setIsPressed(false)}
         onMouseLeave={() => setIsPressed(false)}
         disabled={isExploding}
-        style={{ cursor: isExploding ? "not-allowed" : "pointer" }}
+        style={{
+          cursor: isExploding ? "not-allowed" : "pointer",
+          backgroundColor: isPressed ? "#b91c1c" : "#dc2626",
+          boxShadow: isPressed
+            ? "0 5px 20px -5px rgba(220,38,38,0.4)"
+            : "0 10px 40px -10px rgba(220,38,38,0.5), 0 0 0 1px rgba(220,38,38,0.1)",
+        }}
         className={`
           relative w-64 h-64 md:w-80 md:h-80 rounded-full
-          bg-red-button text-white font-bold text-2xl md:text-3xl
-          shadow-red-glow
+          text-white font-bold text-2xl md:text-3xl
           transition-all duration-150 ease-out
-          hover:bg-red-button-hover hover:shadow-red-glow-hover hover:scale-105
-          active:scale-95 active:shadow-red-glow-active
-          focus:outline-none focus:ring-4 focus:ring-red-button/30
+          hover:scale-105
+          active:scale-95
+          focus:outline-none focus:ring-4 focus:ring-red-500/30
           disabled:cursor-not-allowed disabled:opacity-50
           select-none
-          ${isPressed ? "scale-95 shadow-red-glow-active" : ""}
+          ${isPressed ? "scale-95" : ""}
           ${isExploding ? "opacity-0" : ""}
         `}
         aria-label="The red button - Do Not Press"
