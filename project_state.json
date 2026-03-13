@@ -1,0 +1,141 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "A small React + Tailwind frontend titled \"Red Button Time Wasting Website\" that renders a large \"Do Not Press\" red button. The app tracks button clicks in local component state and, upon reaching exactly 1000 clicks, plays a full-screen explosion/flash/shake/crack animation and then redirects the browser to about:blank. The frontend also includes scaffolding for Internet Identity authentication (DFINITY) via a React context provider, plus a React Query-based hook to create and cache an authenticated (or anonymous) backend canister actor. The Motoko backend currently contains an empty actor with no exposed methods.",
+  "existing_features": [
+    {
+      "id": "IF-1",
+      "title": "Red button landing UI",
+      "synonyms": [
+        "Do Not Press button screen",
+        "Single-button homepage"
+      ],
+      "description": "Renders a centered, large circular red button with hover/active visual effects and a header title \"Do Not Press\" using Tailwind utility classes and custom OKLCH color tokens.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-2",
+      "title": "Local click tracking and press interactions",
+      "synonyms": [
+        "Click counter state",
+        "Button press state"
+      ],
+      "description": "Tracks clickCount in React state using functional updates and tracks isPressed via mouse down/up/leave handlers to drive visual pressed/ripple feedback; disables interaction during the explosion sequence.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-3",
+      "title": "Explosion sequence at 1000 clicks",
+      "synonyms": [
+        "Easter-egg explosion",
+        "Full-screen explosion overlay"
+      ],
+      "description": "Triggers an animated full-screen overlay when clickCount reaches exactly 1000: flash layer, screen shake container, multiple radial gradient explosions, randomized particle elements, and SVG crack lines with staggered delays.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-4",
+      "title": "Post-explosion redirect",
+      "synonyms": [
+        "Blank-page redirect",
+        "Auto-navigate after animation"
+      ],
+      "description": "After the explosion starts, schedules a timeout to redirect the browser to about:blank after ~3 seconds (intended to match animation duration).",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-5",
+      "title": "Tailwind theme tokens and animation utilities",
+      "synonyms": [
+        "Design system variables",
+        "Custom Tailwind utilities"
+      ],
+      "description": "Defines extensive OKLCH-based CSS variables for theme colors (including dark mode), custom red-button tokens, and custom keyframes/classes for flash, shake, explosions, particles, and crack effects; Tailwind configured with typography, container queries, and animation plugins.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-6",
+      "title": "Internet Identity authentication provider (DFINITY)",
+      "synonyms": [
+        "InternetIdentityProvider",
+        "AuthClient integration"
+      ],
+      "description": "Provides a React Context exposing identity, login, clear/logout, and status flags. Creates an AuthClient with configurable idle options, loads an existing authenticated identity on mount, and performs II login with a 30-day delegation TTL and configurable derivation origin/provider URL.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-7",
+      "title": "Backend actor creation and caching via React Query",
+      "synonyms": [
+        "useActor hook",
+        "Authenticated/anonymous canister actor"
+      ],
+      "description": "Creates and caches a typed backend actor (backendInterface) keyed by the current principal. Uses an anonymous actor when not authenticated and an identity-bound actor when authenticated; invalidates and refetches non-actor queries when the actor instance changes.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "IF-8",
+      "title": "App composition with providers",
+      "synonyms": [
+        "Provider setup",
+        "React Query + auth wiring"
+      ],
+      "description": "Bootstraps the app with a shared QueryClientProvider and InternetIdentityProvider at the root (main.tsx), enabling query caching and identity access throughout the component tree.",
+      "reqIds": [],
+      "version": 1
+    },
+    {
+      "id": "feature-display-the-current-button-press-count-in-the-main-ui-so-users-can-see-how-many-times-they-have-clicked-the-red-button",
+      "title": "Display the current button press count in the main UI so users can see how many times they have clicked the red button.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-persist-the-click-counter-in-the-browser-so-that-refreshing-the-page-does-not-reset-progress-toward-1000-clicks",
+      "title": "Persist the click counter in the browser so that refreshing the page does not reset progress toward 1000 clicks.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Add a click counter so the site counts button presses (and likely displays the count again)",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "architectural_notes": [
+    "Frontend built with React functional components and hooks; stateful UI logic kept in App.tsx.",
+    "Styling via TailwindCSS with custom design tokens (OKLCH CSS variables), dark-mode support (class strategy), and custom animation utilities.",
+    "Authentication architecture uses a React Context Provider (InternetIdentityProvider) wrapping the app to expose identity and login/logout actions.",
+    "DFINITY Internet Identity integration via @dfinity/auth-client and delegation validation via @icp-sdk/core/identity.",
+    "Data/actor access patterned with @tanstack/react-query; actor instance is cached by queryKey that includes principal, and dependent queries are invalidated/refetched when the actor changes.",
+    "Backend access abstracted behind a generated/typed actor interface (backendInterface) and a createActorWithConfig factory (referenced from config)."
+  ],
+  "known_issues": [
+    "Motoko backend (backend/main.mo) is an empty actor; no backend functionality is implemented/exposed yet.",
+    "InternetIdentityProvider initialization effect sets loginStatus to 'idle' in finally even after an initialization error sets 'loginError', potentially masking initialization failures.",
+    "CSS keyframes for particle animation use random() inside calc(), which is not supported in standard CSS and will likely be ignored by browsers (particle motion may not behave as intended).",
+    "Two different frontend index.css contents are present in the provided file list (potential duplication/merge artifact) which could lead to inconsistent styling depending on which file is actually used.",
+    "useActor invalidates and refetches all non-actor queries whenever the actor changes; in larger apps this pattern can cause unnecessary refetch churn.",
+    "The click counter is tracked but not displayed and is not persisted (refresh resets progress), so the 1000-click trigger is only reachable within a single session."
+  ],
+  "isFixRequest": false,
+  "generatedImages": [],
+  "gameProjectType": "none",
+  "projectName": "Red Button Time Wasting Website",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

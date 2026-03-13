@@ -1,0 +1,44 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Show and persist the button click counter",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Show the current click count in the main UI while the red button is visible.",
+      "acceptanceCriteria": [
+        "The UI shows a numeric click counter on the main screen while the button is visible (before the explosion).",
+        "The counter increments by 1 on each successful button click (and does not increment during the explosion state).",
+        "The explosion trigger at exactly 1000 clicks continues to work as before."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Render a click counter in the main UI near the existing header/button and ensure it reflects the current click state without changing the existing explosion sequence behavior (still triggers at exactly 1000, same animation + redirect timing)."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Persist the click count to browser storage so refresh restores progress toward 1000 clicks.",
+      "acceptanceCriteria": [
+        "After a page refresh, the displayed click counter restores to the last saved value.",
+        "The persisted counter updates after each click (no more than one click behind).",
+        "If stored data is missing or invalid, the counter safely falls back to 0 without breaking the UI."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/usePersistedNumber.ts",
+          "operation": "create",
+          "description": "Add a small React hook that reads an initial numeric value from localStorage (with validation and safe fallback to 0), exposes the value/setter, and writes updates back to localStorage whenever the value changes."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Adopt the persisted number hook for clickCount so the initial value restores from localStorage, updates are saved after each click, and invalid/missing stored values fall back to 0 while keeping the existing explosion trigger and redirect behavior intact."
+        }
+      ]
+    }
+  ]
+}

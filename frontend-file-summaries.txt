@@ -1,0 +1,5 @@
+{
+  "frontend/src/App.tsx": "Main application component with a centered red button that tracks clicks using persisted state, displays a click counter in the header (hidden during explosion), triggers full-screen explosion effect at exactly 1000 clicks, and redirects to about:blank after the animation completes.",
+  "frontend/src/index.css": "Global styles with OKLCH color system, custom red button tokens, and explosion animation keyframes including flash, shake, radial explosions, particles, and screen crack effects.",
+  "frontend/src/hooks/usePersistedNumber.ts": "Custom React hook that persists a numeric value to localStorage with validation, safe fallback to initial value on errors or invalid data, and automatic synchronization on value changes."
+}
