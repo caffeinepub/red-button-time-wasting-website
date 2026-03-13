@@ -1,23 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from "react";
 
-/**
- * Custom hook that persists a numeric value to localStorage
- * @param key - The localStorage key to use
- * @param initialValue - The default value if no stored value exists
- * @returns [value, setValue] tuple similar to useState
- */
 export function usePersistedNumber(
   key: string,
-  initialValue: number = 0
+  initialValue = 0,
 ): [number, React.Dispatch<React.SetStateAction<number>>] {
-  // Initialize state with value from localStorage or fallback to initialValue
   const [value, setValue] = useState<number>(() => {
     try {
       const storedValue = localStorage.getItem(key);
       if (storedValue !== null) {
-        const parsed = parseFloat(storedValue);
-        // Validate that it's a valid number
-        if (!isNaN(parsed) && isFinite(parsed)) {
+        const parsed = Number.parseFloat(storedValue);
+        if (!Number.isNaN(parsed) && Number.isFinite(parsed)) {
           return parsed;
         }
       }
@@ -27,7 +19,6 @@ export function usePersistedNumber(
     return initialValue;
   });
 
-  // Persist to localStorage whenever value changes
   useEffect(() => {
     try {
       localStorage.setItem(key, value.toString());
