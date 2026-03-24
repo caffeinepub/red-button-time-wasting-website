@@ -8,7 +8,7 @@ function App() {
   const handleClick = (e: React.MouseEvent) => {
     if (e.button !== 0) return;
     if (isExploding) return;
-    setClickCount((prevCount) => prevCount + 1);
+    setClickCount((prev) => prev + 1);
   };
 
   useEffect(() => {
@@ -19,10 +19,9 @@ function App() {
       )
         return;
       setIsPressed(true);
-      setClickCount((prevCount) => prevCount + 1);
+      setClickCount((prev) => prev + 1);
     };
     const handleKeyUp = () => setIsPressed(false);
-
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     return () => {
@@ -32,7 +31,7 @@ function App() {
   }, [isExploding]);
 
   useEffect(() => {
-    if (clickCount === 1000 && !isExploding) {
+    if (clickCount >= 1000 && !isExploding) {
       setIsExploding(true);
     }
   }, [clickCount, isExploding]);
@@ -46,173 +45,94 @@ function App() {
     }
   }, [isExploding]);
 
-  const particles = Array.from({ length: 30 }, (_, i) => ({
-    id: `particle-${i}`,
-    left: `${(i * 37) % 100}%`,
-    top: `${(i * 53) % 100}%`,
-    delay: `${(i * 0.017) % 0.5}s`,
-    duration: `${0.5 + ((i * 0.033) % 1)}s`,
-  }));
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background relative overflow-hidden">
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#0a0a0a",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
       {isExploding && (
-        <>
-          <div className="fixed inset-0 z-50 animate-flash bg-white" />
-          <div className="fixed inset-0 z-40 animate-shake">
-            <div className="absolute inset-0 animate-explosion-1 bg-gradient-radial from-red-500 via-orange-500 to-yellow-500 opacity-80" />
-            <div className="absolute inset-0 animate-explosion-2 bg-gradient-radial from-yellow-400 via-red-600 to-purple-600 opacity-70" />
-            <div className="absolute inset-0 animate-explosion-3 bg-gradient-radial from-orange-500 via-pink-500 to-red-700 opacity-60" />
-            {particles.map((p) => (
-              <div
-                key={p.id}
-                className="absolute w-4 h-4 bg-red-500 rounded-full animate-particle"
-                style={{
-                  left: p.left,
-                  top: p.top,
-                  animationDelay: p.delay,
-                  animationDuration: p.duration,
-                }}
-              />
-            ))}
-            <div className="absolute inset-0 opacity-80">
-              <svg
-                role="presentation"
-                aria-hidden="true"
-                className="w-full h-full"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="0%"
-                  y2="0%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="100%"
-                  y2="0%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.1s" }}
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="0%"
-                  y2="100%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.2s" }}
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="100%"
-                  y2="100%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.15s" }}
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="50%"
-                  y2="0%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.05s" }}
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="50%"
-                  y2="100%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.25s" }}
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="0%"
-                  y2="50%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.12s" }}
-                />
-                <line
-                  x1="50%"
-                  y1="50%"
-                  x2="100%"
-                  y2="50%"
-                  stroke="black"
-                  strokeWidth="3"
-                  className="animate-crack"
-                  style={{ animationDelay: "0.18s" }}
-                />
-              </svg>
-            </div>
-          </div>
-        </>
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 50,
+            background: "radial-gradient(circle, #ef4444, #f97316, #eab308)",
+            opacity: 0.9,
+          }}
+        />
       )}
 
-      <div className="absolute top-12 left-0 right-0 flex flex-col items-center gap-4 z-10">
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground tracking-tight">
+      <div
+        style={{
+          position: "absolute",
+          top: 48,
+          left: 0,
+          right: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 16,
+          zIndex: 10,
+        }}
+      >
+        <h1
+          style={{
+            fontSize: "2.5rem",
+            fontWeight: 700,
+            color: "#ffffff",
+            margin: 0,
+          }}
+        >
           Do Not Press
         </h1>
         {!isExploding && (
-          <div className="text-2xl md:text-3xl font-semibold text-muted-foreground">
-            Clicks: <span className="text-foreground">{clickCount}</span>
+          <div
+            style={{ fontSize: "1.5rem", fontWeight: 600, color: "#9ca3af" }}
+          >
+            Clicks: <span style={{ color: "#ffffff" }}>{clickCount}</span>
           </div>
         )}
       </div>
 
       <button
         type="button"
-        data-ocid="donotpress.primary_button"
         onClick={handleClick}
         onMouseDown={(e) => {
           if (e.button === 0) setIsPressed(true);
         }}
         onMouseUp={() => setIsPressed(false)}
         onMouseLeave={() => setIsPressed(false)}
-        disabled={isExploding}
         style={{
-          cursor: isExploding ? "not-allowed" : "pointer",
+          position: "relative",
+          zIndex: 20,
+          width: 280,
+          height: 280,
+          borderRadius: "50%",
           backgroundColor: isPressed ? "#b91c1c" : "#dc2626",
-          boxShadow: isPressed
-            ? "0 5px 20px -5px rgba(220,38,38,0.4)"
-            : "0 10px 40px -10px rgba(220,38,38,0.5), 0 0 0 1px rgba(220,38,38,0.1)",
+          border: "none",
+          color: "#ffffff",
+          fontWeight: 700,
+          fontSize: "1.5rem",
+          cursor: "pointer",
+          transform: isPressed ? "scale(0.95)" : "scale(1)",
+          transition: "transform 0.1s, background-color 0.1s",
+          boxShadow:
+            "0 0 40px rgba(220,38,38,0.6), 0 10px 40px rgba(220,38,38,0.4)",
+          userSelect: "none",
+          outline: "none",
+          opacity: isExploding ? 0 : 1,
         }}
-        className={`
-          relative w-64 h-64 md:w-80 md:h-80 rounded-full
-          text-white font-bold text-2xl md:text-3xl
-          transition-all duration-150 ease-out
-          hover:scale-105
-          active:scale-95
-          focus:outline-none focus:ring-4 focus:ring-red-500/30
-          disabled:cursor-not-allowed disabled:opacity-50
-          select-none
-          ${isPressed ? "scale-95" : ""}
-          ${isExploding ? "opacity-0" : ""}
-        `}
-        aria-label="The red button - Do Not Press"
+        aria-label="Do Not Press"
       >
-        {isPressed && !isExploding && (
-          <span className="absolute inset-0 rounded-full bg-white/20 animate-ping" />
-        )}
-        <span className="relative z-10">Do Not Press</span>
+        Do Not Press
       </button>
     </div>
   );
